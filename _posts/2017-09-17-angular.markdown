@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "Angularar入门--开发环境的搭建"
+title:      "Angular入门--开发环境的搭建"
 subtitle:   "Upgrading Ele.me to Progressive Web App"
 date:       2017-09-17 12:00:00
 author:     "ddxg"
