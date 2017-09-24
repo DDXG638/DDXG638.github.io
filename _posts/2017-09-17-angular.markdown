@@ -68,7 +68,7 @@ tslint.json|给TSLint和Codelyzer用的配置信息，当运行ng lint时会用�
 | README.md|项目的基础文档，预先写入了CLI命令的信息。 别忘了用项目文档改进它，以便每个查看此仓库的人都能据此构建出你的应用。 |
 | tsconfig.json | TypeScript编译器的配置，你的IDE会借助它来给你提供更好的帮助。 |
 | tslint.json | 给TSLint和Codelyzer用的配置信息，当运行ng lint时会用到。 Lint功能可以帮你保持代码风格的统一。 |
->>>>>>> 66cfbecdff1104f567a45dff92e62a63e3517cec
+
 
 
 ----------
@@ -78,7 +78,7 @@ tslint.json|给TSLint和Codelyzer用的配置信息，当运行ng lint时会用�
 >**注意：通过命令行工具生成目录结构是按照一定的规则来生成的，如果随意改变文件名或者目录结构，很可能会导致命令行工具其他功能不能使用。Angular没有那么灵活**
 
 ![src的目录结构](http://img.blog.csdn.net/20170917161356999?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
-<<<<<<< HEAD
+
 
 File 文件     | Purpose 用途
 -------- | ---
@@ -107,7 +107,7 @@ tsconfig.{app&#124;spec}.json|TypeScript编译器的配置文件。
 | styles.css | 这里是你的全局样式。 大多数情况下，你会希望在组件中使用局部样式，以利于维护，不过那些会影响你整个应用的样式你还是需要集中存放在这里。 |
 | test.ts | 这是单元测试的主要入口点。 它有一些你不熟悉的自定义配置，不过你并不需要编辑这里的任何东西。 |
 | tsconfig.{app&#124;spec}.json|TypeScript编译器的配置文件。 |
->>>>>>> 66cfbecdff1104f567a45dff92e62a63e3517cec
+
 
 
 ----------
