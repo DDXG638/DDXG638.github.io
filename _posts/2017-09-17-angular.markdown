@@ -1,6 +1,6 @@
 ---
 layout:     post
-title:      "Anguar入门--开发环境的搭建"
+title:      "Angularar入门--开发环境的搭建"
 subtitle:   "Upgrading Ele.me to Progressive Web App"
 date:       2017-09-17 12:00:00
 author:     "ddxg"
@@ -28,7 +28,7 @@ tags:
  安装完后，输入 ```ng -v``` 命令，有如下界面则说明安装成功
  ![Angular CLI的版本](http://img.blog.csdn.net/20170917154110050?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-##步骤二：创建一个项目
+## 步骤二：创建一个项目
 运行下列命令来在当前目录生成一个新项目以及应用的骨架代码
 
 ```
@@ -39,6 +39,7 @@ ng new my-first
 ![根目录结构](http://img.blog.csdn.net/20170917160200390?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 每个结构对应的介绍：
+
 File 文件     | Purpose 用途
 -------- | ---
 e2e/|在e2e/下是端到端（end-to-end）测试。 它们不在src/下，是因为端到端测试实际上和应用是相互独立的，它只适用于测试你的应用而已。 这也就是为什么它会拥有自己的tsconfig.json。
@@ -61,6 +62,7 @@ tslint.json|给TSLint和Codelyzer用的配置信息，当运行ng lint时会用�
 >**注意：通过命令行工具生成目录结构是按照一定的规则来生成的，如果随意改变文件名或者目录结构，很可能会导致命令行工具其他功能不能使用。Angular没有那么灵活**
 
 ![src的目录结构](http://img.blog.csdn.net/20170917161356999?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
 File 文件     | Purpose 用途
 -------- | ---
 app/app.component.{ts,html,css,spec.ts}|使用HTML模板、CSS样式和单元测试定义AppComponent组件。 它是根组件，随着应用的成长它会成为一棵组件树的根节点。
@@ -77,11 +79,11 @@ tsconfig.{app&#124;spec}.json|TypeScript编译器的配置文件。
 
 
 ----------
-##**组件**
+## 组件
 >组件的必备元素
 ![组件的必备元素](http://img.blog.csdn.net/20170917170726801?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-##**步骤三：启动项目**
+## 步骤三：启动项目
 在创建的项目根目录下，输入
 ```
 ng serve --open
