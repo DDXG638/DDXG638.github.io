@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "初始化RN项目"
-subtitle:   "请多指教"
+subtitle:   "刚刚入门，请多指教"
 date:       2017-11-13 12:00:00
 author:     "ddxg"
 header-img: "img/home-bg-o.jpg"
