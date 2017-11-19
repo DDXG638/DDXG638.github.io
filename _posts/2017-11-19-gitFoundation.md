@@ -18,14 +18,14 @@ tags:
 之前很少接触git，对git的命令不熟悉，每次上线的时候都是挺怕的，特别是分支合并方面。这里我记录常用到的命令。
 
 
-###**1.创建版本库**
+### **1.创建版本库**
 
 ```
 git init
 ```
 这个命令会创建一个空的仓库，目录里面会多出一个.git的目录，这个目录是Git来跟踪管理版本库的，不要更改里面的文件，会破坏git仓库的结构的。
 
-###**2.从远程库克隆**
+### **2.从远程库克隆**
 
 ```
 git clone git@github.com:DDXG638/DDXG638.github.io.git
@@ -44,7 +44,7 @@ git add index.html
 ```
 git commit -m "这里写提交时附加的信息文本"
 ```
-###**3.版本回退**
+### **3.版本回退**
 可以使用git log命令查看提交的历史记录
 ![这里写图片描述](http://img.blog.csdn.net/20171119205340919?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 图中红框框出来的是提交的版本号，最上面的是最新的版本，就是刚刚修改index.html文件后提交的版本。
@@ -58,7 +58,7 @@ git reset --hard HEAD^
 版本回到了版本id为ce789d开头的版本，即修改index.html文件之前的版本，工作区的代码也回到了上一个版本。
 上面的命令也可以使用改为：git reset --hard ce789d这中id的形式。如果后悔回退了，也是可以回去的，只要知道提交id，就可以在版本之间跳来跳去。
 
-###**4.工作区和暂存区**
+### **4.工作区和暂存区**
 ![这里写图片描述](http://img.blog.csdn.net/20171119202612058?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 1.工作区：就是你在电脑里能看到的目录
 2.版本库：工作区有一个隐藏目录.git，这个不算工作区，而是Git的版本库。Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支master，以及指向master的一个指针叫HEAD。
@@ -68,7 +68,7 @@ git reset --hard HEAD^
 第二步是用git commit提交更改，实际上就是把暂存区的所有内容提交到当前分支。
 可以这样理解，需要提交的文件修改通通放到暂存区，然后，一次性提交暂存区的所有修改。
 
-###**5.撤销修改**
+### **5.撤销修改**
 1.还没有add操作的撤回
 
 ```
@@ -83,7 +83,7 @@ git reset HEAD fileName
 ```
 把暂存区的修改撤销掉（unstage），重新放回工作区。git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区，HEAD表示最新的版本。然后再用git checkout操作将工作区的修改撤回。
 
-###**6.创建与合并分支**
+### **6.创建与合并分支**
 第2步克隆下来的是master分支，即主分支。
 ![这里写图片描述](http://img.blog.csdn.net/20171119192528913?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 这个HEAD指向的就是当前分支。一开始的时候，master分支是一条线，Git用master指向最新的提交，再用HEAD指向master，就能确定当前分支，以及当前分支的提交点。每次提交，master分支都会向前移动一步，这样，随着你不断提交，master分支的线也越来越长。
@@ -110,7 +110,7 @@ git merge命令用于合并指定分支到当前分支，这是master的内容�
 git branch -d dev
 ```
 
-###**7.解决冲突**
+### **7.解决冲突**
 多人开发的时候很可能会遇到合并冲突，假如有人修改了dev分支的某个文的的某一行并且提交commit了，而master分支中也有人修改了与dev分支同一个文件的同一行，也进行提交commit了，在dev想master合并的时候就会产生冲突。
 ![这里写图片描述](http://img.blog.csdn.net/20171119221402089?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 上图就说明存在冲突，需要手动解决冲突。直接打开README.md文件，Git用<<<<<<<，=======，>>>>>>>标记出不同分支的内容，需要我们手动选择，然后在add。。。commit。。。
@@ -121,7 +121,7 @@ git branch -d dev
 查看状态：
 ![这里写图片描述](http://img.blog.csdn.net/20171119222425360?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
-###**8.生成diff文件**
+### **8.生成diff文件**
 ```
 git diff > a.diff
 ```
