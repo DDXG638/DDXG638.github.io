@@ -1,3 +1,17 @@
+---
+layout:     post
+title:      "js函数节流和去抖动"
+subtitle:   "搜索框下拉提示"
+date:       2017-11-25 18:13:43
+author:     "ddxg"
+header-img: "img/home-bg-o.jpg"
+header-mask: 0.3
+catalog:    true
+tags:
+    - javascript
+    - html
+---
+
 ## **搜索框下拉提示--js函数节流和去抖动**
 
 #### **1.搜索框的事件监听**
