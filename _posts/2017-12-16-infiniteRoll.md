@@ -1,3 +1,18 @@
+---
+layout:     post
+title:      "html 文字、图片水平无限滚动"
+subtitle:   "文字、图片滚动"
+date:       2017-12-16 21:51:43
+author:     "ddxg"
+header-img: "img/home-bg-o.jpg"
+header-mask: 0.3
+catalog:    true
+tags:
+    - CSS3
+    - javascript
+---
+
+
 ## **html 文字、图片水平无限滚动** 
 
 经常在淘宝、京东的app页面中看见水平的广告轮播和中奖信息的轮播。
