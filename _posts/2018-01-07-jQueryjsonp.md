@@ -79,7 +79,7 @@ var server = http.createServer(function (req, res) {
 
 在页面上直接发起一个跨域的ajax请求是不可以的，不过，在页面上引入不同域上的js脚本、图片、视频等是可以的，像图片，只要连接是对的就可以访问。
 所以，就可以利用`<script src="">` 来完成跨域请求。
-当点击"点击跨域获取数据"的按钮时，添加一个<script>标签，用于发起跨域请求，src为：http://localhost:4000/getInfo?callback=getInfo，getInfo就是回调函数名称，传到后台，用于包裹数据。数据返回到前端后，就是getInfo(res)的形式，因为是script脚本，所以自动调用getInfo函数，而res就是getInfo的参数。
+当点击"点击跨域获取数据"的按钮时，添加一个`<script>`标签，用于发起跨域请求，src为：http://localhost:4000/getInfo?callback=getInfo，getInfo就是回调函数名称，传到后台，用于包裹数据。数据返回到前端后，就是getInfo(res)的形式，因为是script脚本，所以自动调用getInfo函数，而res就是getInfo的参数。
 
 ```
 <!DOCTYPE html>
