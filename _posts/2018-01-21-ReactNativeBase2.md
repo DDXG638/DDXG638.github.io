@@ -20,6 +20,7 @@ tags:
  - 父组件以自身的state作为子组件的props；父组件调用setState，于是子组件的props相应变化
  - 通过ref调用子组件的方法
 
+有个例子：
 ```
 import React, { Component } from 'react'
 import {
@@ -73,6 +74,7 @@ class CountDown extends Component {
 
 class App extends Component {
   addTime = () => {
+  /* 调用子组件的addTime方法 */
     this.countDown.addTime(10);
   };
   render() {
@@ -106,13 +108,16 @@ const styles = StyleSheet.create({
 AppRegistry.registerComponent('App', () => App)
 
 ```
+
+有一个倒计时的组件CountDown，初始秒数为20，秒数每隔一秒减一。点击父组件中的TouchableOpacity组件，就可以让CountDown的倒计时秒数增加10。就是父组件向子组件通信，让子组件改变状态。
+
 ![这里写图片描述](http://img.blog.csdn.net/20180121173837345?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
 最重要的是这个ref的赋值
 ```
 <CountDown ref={countDown => this.countDown = countDown}/>
 ```
-将CountDown组件的实例复制给this.countDown，这样就可以通过`this.countDown.addTime(10)` 来调用CountDown组件的`addTime()` 成员方法。
+将CountDown组件的实例赋值给this.countDown，这样就可以通过`this.countDown.addTime(10)` 来调用CountDown组件的`addTime()` 成员方法。
 
 #### **2. 子组件向父组件通信** 
 
@@ -213,11 +218,11 @@ AppRegistry.registerComponent('App', () => App)
 ```
 {
 this.arr.map((arrName) => 
-	<CountDown key={arrName} 
-		noTime={
-			(child) => this.noTimeParent(arrName, child)
-		}
-	/>)
+  <CountDown key={arrName} 
+    noTime={
+      (child) => this.noTimeParent(arrName, child)
+    }
+  />)
 }
 ```
 将父组件的`noTimeParent` 成员方法通过props传给子组件，为了传递有标识度的参数需要在父组件函数外面多包一层函数，这里传了数组arr中的内容作为参数。
@@ -237,3 +242,4 @@ noTimeParent = (parentData, childData) => {
   };
 ```
 ![这里写图片描述](http://img.blog.csdn.net/20180121194153685?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvQWxpZ3VhZ3Vh/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
