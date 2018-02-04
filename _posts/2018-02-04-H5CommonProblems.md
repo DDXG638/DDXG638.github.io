@@ -1,7 +1,7 @@
 ﻿---
 layout:     post
 title:      "H5开发中遇到的问题"
-subtitle:   "React Native"
+subtitle:   "H5开发"
 date:       2018-02-04 21:51:43
 author:     "ddxg"
 header-img: "img/post-bg-ios9-web.jpg"
@@ -86,7 +86,7 @@ rem是相对于html font size的。
 0.01rem可能少于1px，所以直接为0了。
 解决方法：
 如果对边框的宽度要求不是很高的话，直接用1px，或者用0.02rem。
-如果对边框的宽度要求比较高，又要适应像有些iphone那种retina屏的话，额。。。还是感觉没有很方便的九诀方案
+如果对边框的宽度要求比较高，又要适应像有些iphone那种retina屏的话，额。。。还是感觉没有很方便的解决方案
 [http://top.css88.com/archives/722](http://top.css88.com/archives/722)
 [https://www.cnblogs.com/sese/p/7067961.html](https://www.cnblogs.com/sese/p/7067961.html)
 
