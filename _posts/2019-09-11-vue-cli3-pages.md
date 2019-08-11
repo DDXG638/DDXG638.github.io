@@ -72,15 +72,15 @@ module.exports = {
 
 我这里有两个页面，`index`和`task`,下面是这两个页面基本没有引入第三方依赖时build后的`chunk-vendors.js`文件大小
 
-![](../img/2019/pages-1.png)
+![img](img/2019/pages-1.png)
 
 `index`页面引入element-ui，的打包情况：
 
-![](../img/2019/pages-2.png)
+![img](img/2019/pages-2.png)
 
 `index`页面引入element-ui，`task`引入mint-ui的打包情况：
 
-![](../img/2019/pages-3.png)
+![img](img/2019/pages-3.png)
 
 > 观察可知，现有的打包机制会将src/pages/下面所有的html页面使用到的第三方依赖都打包到dist/js/chunk-vendor.js里面，
 > 每个页面的js逻辑打到dist/js/xxx(页面的名字).js每个页面引入的是chunk-vendor.js和xxx(页面的名字).js。随着使用的第三方依赖越多，每个页面加载的`chunk-vendor.js`文件就越大，引入的多余代码就越多。
@@ -107,7 +107,7 @@ chainWebpack: config => {
 
 得到的结果是：
 
-![](../img/2019/pages-4.png)
+![img](img/2019/pages-4.png)
 
 各自页面中引入的依赖添加到了各自页面的js中，不会引入多余的不需要的依赖了。
 
