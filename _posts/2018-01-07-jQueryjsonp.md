@@ -8,7 +8,7 @@ header-img: "img/home-bg-o.jpg"
 header-mask: 0.3
 catalog:    true
 tags:
-    - javaScript
+    - JavaScript
 ---
 
 
