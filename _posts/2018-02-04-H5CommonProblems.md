@@ -8,7 +8,7 @@ header-img: "img/post-bg-ios9-web.jpg"
 header-mask: 0.3
 catalog:    true
 tags:
-    - H5
+    - H5outline
     - 常见问题
 ---
 
@@ -92,14 +92,49 @@ rem是相对于html font size的。
 
 
 
+#### 禁止文字自动调整大小
+``` css
+/* 禁止文字自动调整大小 */
+-webkit-text-size-adjust: none;
+```
+[css3字体缩放样式-webkit-text-size-adjust的用法详解](https://blog.csdn.net/juzipchy/article/details/71367642)
 
+
+#### 去除高亮
+
+在移动端，点击有事件绑定的元素时，会有一个高亮的框出现，不太美观。
+
+``` css
+/* 去除高亮 */
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+```
+
+
+#### 浏览器自动填充
+
+浏览器有邮箱或者密码自动填充的功能，填充后会在密码输入框显示一个有色的背景，例如谷歌浏览器的背景时黄色的，有点不太好看。可以覆盖一下样式。
+
+``` css
+/* reset chrome autofill, only support chrome 27 and lower */
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+    background: #fff;
+    background-image: none;
+    color: rgb(0, 0, 0);
+}
+```
+
+
+```
+/* Don't kill focus outline for keyboard users: http://24ways.org/2009/dont-lose-your-focus */
+a:hover, a:active {
+    outline: none;
+}
+```
 
 
 参考：
-[http://blog.csdn.net/luochao_tj/article/details/17755457](http://blog.csdn.net/luochao_tj/article/details/17755457)
-
-
-[https://segmentfault.com/a/1190000008271481](https://segmentfault.com/a/1190000008271481)
+- [http://blog.csdn.net/luochao_tj/article/details/17755457](http://blog.csdn.net/luochao_tj/article/details/17755457)
+- [https://segmentfault.com/a/1190000008271481](https://segmentfault.com/a/1190000008271481)
 
 
 
