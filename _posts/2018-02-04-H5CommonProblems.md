@@ -124,7 +124,7 @@ input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
 ```
 
 
-```
+``` css
 /* Don't kill focus outline for keyboard users: http://24ways.org/2009/dont-lose-your-focus */
 a:hover, a:active {
     outline: none;
@@ -132,27 +132,21 @@ a:hover, a:active {
 ```
 
 
+#### 禁止鼠标行为
+
+``` javascript
+// PC端禁止右键，禁止移动端长按弹出菜单
+document.oncontextmenu = function(){return false;};
+// PC端禁止选择
+document.onselectstart = function(){return false;};
+// PC端禁止复制
+document.oncopy = function(){return false;};
+document.oncut = function(){return false;};
+```
+
+
 参考：
 - [http://blog.csdn.net/luochao_tj/article/details/17755457](http://blog.csdn.net/luochao_tj/article/details/17755457)
 - [https://segmentfault.com/a/1190000008271481](https://segmentfault.com/a/1190000008271481)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
