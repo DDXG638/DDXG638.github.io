@@ -86,13 +86,33 @@ myButton组件中触发自定义事件：
 this.$emit('aaabbb', params);
 ```
 
-**
-$EventBus是一个新的Vue实例，不使用$EventBus也是可以的，可以直接使用`this.$root.$on`
-代替`this.$EventBus.$on`，不过通常都不这么做。 **
+**$EventBus是一个新的Vue实例，不使用$EventBus也是可以的，可以直接使用`this.$root.$on`
+代替`this.$EventBus.$on`，不过通常都不这么做。**
+
 
 ### 自定义组件的v-model
-https://cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model
 
-provide & inject
+自定义双向绑定的组件需要满足两个条件：
+- 绑定value，
+- 响应input事件
 
-async-validator
+对于输入框来说的话，默认会利用名为 `value` 的 `prop` 和名为 `input` 的事件。
+
+当自定义像单选框、复选框等类型的组件的时候，就需要绑定`checked` 和 响应 `change` 事件了。这时就需要使用 `model` 选项来处理。
+
+[自定义组件的 v-model](https://cn.vuejs.org/v2/guide/components-custom-events.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BB%84%E4%BB%B6%E7%9A%84-v-model)
+[model](https://cn.vuejs.org/v2/api/#model)
+
+
+表单组件包含关系： `Form > FormItem > Input`
+- `From` 组件提供 model表单数据 和 rule校验规则
+- `FormItem` 组件负责校验表单数据 和 显示错误信息
+- `Input` 派发数据更新通知给FormItem做校验
+
+
+`FormItem` 与 `From` 的层级是不确定的，`FormItem` 要获取model数据和rule数据 做校验，
+数据使用 `props` 传递是不太靠谱的，所以使用 [provide & inject](https://cn.vuejs.org/v2/guide/components-edge-cases.html#%E4%BE%9D%E8%B5%96%E6%B3%A8%E5%85%A5)
+
+使用第三方的 [async-validator](https://github.com/yiminghe/async-validator) 库进行校验。
+
+代码：`myLearn/vue-project/vue-home/src/components/task/form/MyForm.vue`
