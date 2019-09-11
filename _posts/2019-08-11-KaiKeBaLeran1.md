@@ -116,3 +116,32 @@ this.$emit('aaabbb', params);
 使用第三方的 [async-validator](https://github.com/yiminghe/async-validator) 库进行校验。
 
 代码：`myLearn/vue-project/vue-home/src/components/task/form/MyForm.vue`
+
+`Input -> FormItem` 和 `FormItem -> Form` 都用通知的操作，一开始的做法是：
+``` javascript
+// this.$parent写太死了，如果又嵌套了一层，那所有逻辑都会出错
+this.$parent.$emit('addFormItem', this);
+```
+
+如果层级结构改变，那 `this.$parent` 就指向错误了，功能就不能正常进行了。
+
+后来参考了 `element-ui` 的方法，一层一层的向上找对应的组件，`element-ui` 的源码：
+``` javascript
+dispatch(componentName, eventName, params) {
+    var parent = this.$parent || this.$root;
+    var name = parent.$options.componentName;
+
+
+    // 存在父组件 && 组件名称不符合时，就再网上一层寻找。这里 !name 是为了过滤普通标签，这里找的都是自定义组件
+    while (parent && (!name || name !== componentName)) {
+        parent = parent.$parent;
+
+        if (parent) {
+            name = parent.$options.componentName;
+        }
+    }
+    if (parent) {
+        parent.$emit.apply(parent, [eventName].concat(params));
+    }
+}
+```
