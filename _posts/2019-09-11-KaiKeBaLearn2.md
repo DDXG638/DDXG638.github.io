@@ -74,5 +74,70 @@ router.beforeEach((to,from,next)=>{
 })
 ```
 
+## 路由元信息
 
-## 
+> 可以在路由中设置一些额外的信息供导航守卫处理
+
+``` javascript
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/foo',
+      component: Foo,
+      children: [
+        {
+          path: 'bar',
+          component: Bar,
+          // 设置一个meta字段，表示请求时需要校验登录
+          meta: { requiresAuth: true }
+        }
+      ]
+    }
+  ]
+})
+```
+
+
+
+## Cube-UI 
+
+> 滴滴公司的vue UI组件库，[传送门](https://didi.github.io/cube-ui/#/zh-CN/docs/form)
+
+
+
+## axios 拦截器
+
+> 请求发出之前 和 请求会来之前 可以做一些统一的操作，比如可以统一在请求发出之前做统一的header处理。
+
+[Interceptors](http://www.axios-js.com/docs/#Interceptors)
+
+类似代码：
+
+``` javascript
+axios.interceptors.request.use(config => {
+  if (store.state.sign) {
+    // 统一设置headers信息
+    config.headers._sign = store.state.sign;
+  }
+  return config;
+});
+
+// 响应拦截器，可以提前处理一些公共逻辑
+axios.interceptors.response.use(
+  response => {
+    // 如果status == -1，sign校验错误，需要重新登录
+    if (response.status == 200) {
+      const {status} = response.data;
+      if (+status === -1) {
+        loginHandler()
+      }
+    }
+    return response;
+  },
+  err => {
+      if (err.response.status === 401) { // 未授权
+        loginHandler()
+      }
+  }
+);
+```
