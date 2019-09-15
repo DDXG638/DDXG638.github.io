@@ -141,3 +141,27 @@ axios.interceptors.response.use(
   }
 );
 ```
+
+
+## vuex的订阅 [subscribe](https://vuex.vuejs.org/zh/api/#subscribe)
+
+> 订阅 store 的 mutation。每个 mutation 完成后调用，接收 mutation 和经过 mutation 后的状态作为参数。
+
+可以统一处理多个 mutation 完成后的逻辑。
+
+``` javascript
+// 订阅
+store.subscribe((mutation, state) => {
+  switch (mutation.type) {
+    case "addBookshelf":
+      localStorage.setItem("token", JSON.stringify(state.book));
+      break;
+    case "addCart":
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+      break;
+  }
+});
+```
+
+除了可以订阅 mutation ，也可以订阅 [ store 的 action](https://vuex.vuejs.org/zh/api/#subscribeaction)
+

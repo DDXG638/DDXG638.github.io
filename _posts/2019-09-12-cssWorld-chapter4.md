@@ -73,9 +73,114 @@ img[src] {/* 有src属性的样式 */}
 ### content 内容生成技术
 
 有好几个例子，这里列举一下
-- [两端对齐和下边缘对齐](https://demo.cssworld.cn/4/1-7.php)
-- [字体图标](https://demo.cssworld.cn/4/1-8.php)
-- [动态...](https://demo.cssworld.cn/4/1-9.php)
+#### [两端对齐和下边缘对齐](https://demo.cssworld.cn/4/1-7.php)
+#### [字体图标](https://demo.cssworld.cn/4/1-8.php)
+#### [动态...](https://demo.cssworld.cn/4/1-9.php)
+#### `content: attr(alt)` attr属性值内容生成，自定义的属性也可以使用。
+#### content 生成的混合特性
+    ``` css
+        a:after{
+            content: "(" attr(href) ")";
+        }
+        q:before{
+            content: open-quote url(1.png);
+        }
+        .counter.before{
+            content: counter(sdf, '-') '. ';
+        }
+    ```
+#### content 计数器
 
-未完待续 ...
+计数器中有三个相关的属性。
 
+- counter-reset，用于给计数器起名字 和 计数初始值。可以叠加，使用空格分开
+[例子](https://demo.cssworld.cn/4/1-11.php)
+``` css
+.counter {
+  counter-reset: wangxiaoer 2; 
+  font-size: 32px; 
+  font-family: Arial Black; 
+  color: #cd0000; 
+}
+.counter:before { 
+  content: counter(wangxiaoer); 
+}
+
+/* 可以叠加 */
+.diejia {
+    counter-reset: wangxiaoer 2 wangxiaoer2 3;
+}
+```
+
+- counter-increment，计数器可以递增（或递减）某个值，这可以是正值或负值。
+如果没有提供 number 值，则默认为 1。[例子](https://demo.cssworld.cn/4/1-13.php)
+计数器的数值变化遵循 `HTML` 渲染顺序，每遇到 `increment` 计数器就变化，什么时候 `counter` 输出就输出此时的计数值。
+
+``` css
+.counter {
+  counter-reset: wangxiaoer 2;
+  font-size: 32px; 
+  font-family: Arial black; 
+  color: #cd0000; 
+}
+.counter:before,
+.counter:after { 
+  content: counter(wangxiaoer);
+  counter-increment: wangxiaoer;
+}
+
+/* 可以指定增加的数值 */
+.counter:after { 
+  content: counter(wangxiaoer);
+  counter-increment: wangxiaoer 2; /* 每次增加2 */
+}
+```
+
+- counter()/counters()，方法，从上面看，`conuter(myCounter)` 就是输出计数值。
+还有第二个参数：[`list-style-type`](https://www.w3school.com.cn/css/pr_list-style-type.asp)，可以指定递增的是英文字母还是罗马数字等
+counter也是支持叠加的，[例子](https://demo.cssworld.cn/4/1-17.php)
+
+``` css
+.counter {
+    counter(myCounter, styleType);
+}
+```
+
+`counters()` 可是实现 `1.1、1.2、1.3...` 这种形式的序号。基本用法：`counters(name, string)`，
+`string` 就是中间的连接符。[例子](https://demo.cssworld.cn/4/1-18.php)
+
+#### 应用
+
+可以使用css实现列表选择个数的展示。勾选item之后，就会显示勾选的个数。[例子](https://github.com/DDXG638/myLearn/blob/master/css-world/charpter4/css-counter.html)
+
+``` html
+<style>
+    .wrapper{
+        counter-reset: mySelect;
+    }
+
+    input:checked {
+        counter-increment: mySelect;
+    }
+
+    p::after {
+        content: counter(mySelect) '课程';
+    }
+</style>
+
+
+<div class="wrapper">
+    <input type="checkbox">语文
+    <input type="checkbox">数学
+    <input type="checkbox">英语
+    <input type="checkbox">历史
+    <input type="checkbox">地理
+    <input type="checkbox">政治
+
+    <p>已经选择</p>
+</div>
+```
+
+
+
+## padding
