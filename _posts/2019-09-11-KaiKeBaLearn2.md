@@ -295,3 +295,94 @@ Toast.getInstance = props => {
 ```
 
 参考：[Vue 自定义全局消息框组件](https://www.cnblogs.com/conglvse/p/9641550.html)
+
+
+## 仿照cube-ui的create-api，封装一个非常简单的
+
+> 按照上面的 `Toast` 的话，如果需要增加一个弹窗组件，那又要写一遍类似的 `toast.js` 代码，
+> 看到cube-ui中封装了一个[create-api 模块](https://didi.github.io/cube-ui/#/zh-CN/docs/create-api)，功能非常强大，也很实用。就照着写了个很简单的。
+
+``` javascript
+// myCreate.js
+
+// 给component添加一个创建组件实例的方法，可以动态编译自身模板并挂载
+function myRender(Vue, component, props) {
+  // 创建一个Vue实例
+  const instance = new Vue({
+    render(h) {
+      // h 是 createElement 方法的缩写
+      // 渲染函数：用于渲染Toast模板为虚拟dom
+      // 第二个对象是模板中属性对应的数据对象，see：https://cn.vuejs.org/v2/guide/render-function.html#createElement-%E5%8F%82%E6%95%B0
+      return h(component, {props});
+    }
+  }).$mount(); // 执行挂载,若不指定选择器，则模板将被渲染为文档之外的元素
+
+  // 由于上面的$mount()没有指定挂载的选择器
+  // 必须使用原生dom api把它插入文档中
+  // $el指的是渲染的Toast中真实dom元素
+  document.body.appendChild(instance.$el); // $mount()指定了选择器，则不需要这一行代码了
+
+  // 获取实例，$children指的是当前Vue实例中包含的所有组件实例
+  const thisComponent = instance.$children[0];
+
+  // 为实例添加销毁方法，防止内存泄漏
+  thisComponent.remove = function() {
+    // 使用Vue的销毁实例的方法，see：https://cn.vuejs.org/v2/api/#vm-destroy
+    console.log('destroy', thisComponent.$destroy);
+    instance.$el.remove(); // 先移除DOM节点，再销毁实例
+    instance.$destroy(); 
+  }
+
+  return thisComponent;
+};
+
+function myCreateAPI(Vue, component) {
+    let componentName = component.name;
+    let apiName = componentName.charAt(0).toUpperCase() + componentName.slice(1);
+    console.log('apiName', apiName);
+    // 在Vue上面挂一个['$myCreate' + apiName]方法。
+    Vue.prototype['$myCreate' + apiName] = function (props) {
+        // 这里只实现了传props，没有实现slot插槽等其他方法
+        return myRender(Vue, component, props);
+    };
+}
+
+// 暴露接口
+export default myCreateAPI;
+
+// ------------------------
+
+// main.js 中
+// 使用cube的creameAPI添加加入购物车小球动画组件
+createAPI(Vue, BallAmin, ['transitionend']); // 定义一个动画结束的回调事件名称
+
+// 自己封装的createAPI，
+myCreateAPI(Vue, BallAmin);
+
+// ------------------------
+
+// 在组件中调用
+
+// 使用cube-ui的createAPI显示加购球动画
+  const ballAminComp = this.$createBallAmin({
+    el,
+    onTransitionend() {
+      // 动画回调事件，销毁实例
+      console.log('销毁实例');
+      ballAminComp.remove();
+    }
+  });
+  ballAminComp.show();
+
+// 使用自己封装的create api 添加加入购物车小球动画组件
+  const ballAminComp = this.$myCreateBallAmin({el});
+  console.log('ballAminComp',ballAminComp);
+  ballAminComp.show();
+  ballAminComp.$on('transitionend', function(){
+    console.log('-删除-');
+    ballAminComp.remove();
+  });
+```
+
+跟cube-ui相比差太远了，不断完善中。。。
+
