@@ -165,3 +165,133 @@ store.subscribe((mutation, state) => {
 
 除了可以订阅 mutation ，也可以订阅 [ store 的 action](https://vuex.vuejs.org/zh/api/#subscribeaction)
 
+
+## VUE 插件
+
+[开发插件](https://cn.vuejs.org/v2/guide/plugins.html#%E5%BC%80%E5%8F%91%E6%8F%92%E4%BB%B6)
+
+[这个博客记录得比较详细](https://www.cnblogs.com/adouwt/p/9211003.html)
+
+Vue.js 的插件最重要的是要暴露一个 install 方法。第一个参数是 Vue 构造器，第二个参数是一个可选的选项对象。然后使用`Vue.use(xxx)` 进行挂载，vue就会去调用`install` 方法了。
+
+``` javascript
+// 记录浏览器历史栈的小插件
+const History = {
+    _history: [], // 历史记录堆栈
+    install(Vue) {
+        // 在VUE的原型上挂一个$routerHistory字段用于快速获取历史对象
+        Object.defineProperty(Vue.prototype, '$routerHistory', {
+            get() {
+                return History;
+            }
+        })
+        
+        /* 也可以用这种方式在vue原型上面挂 */
+        // Vue.prototype.$routerHistory = History
+        
+        /* 也可以在这里定义全局组件 */
+        Vue.component('my-component-name', {
+            // ... 选项 ...
+        })
+    },
+    push(path) { // 页面跳转时推入栈
+        this._history.push(path);
+    },
+    pop() { // 页面回退出栈
+        this._history.pop();
+    },
+    canBack(){ // 只有栈中有历史记录才能回退
+        return this._history.length > 1;
+    }
+}
+export default History;
+```
+
+
+
+## vue 自定义使用api调用的全局组件
+
+> 像Loading、弹窗和Toast这些使用频率比较组件做成全局组件也不算很方便，要用的地方还是得`import`一下`vue`文件或者写显示的写`html`代码。
+> 我之前的方式是将Loading、弹窗和Toast组件都在`App.vue`文件中引入，其他组件通过`$EventBus` 的 `$emit` 来调用，这样就不会到处引入公共组件了。
+> 现在介绍一些UI库常用的方式，就是通过api调用的方法调用公共组件，像 `this.$Toast({...})` 这样子调用。
+
+这里举一个 `Toast` 组件为例。`Toast.vue` 方面的东西就不说了，主要记录一下是怎么实现可以用api的方式调用 `Toast` 的。
+
+大概流程是这样子的：
+- 创建一个新的Vue实例，用于渲染 `Toast` 组件。
+- 使用 `render` 函数对 `Toast` 进行渲染，使用 `$mount` 方法进行挂载。
+- 获取 `Toast` 实例，就可进行Toast操作了。
+
+``` javascript
+import Toast from "@/components/Notice.vue";
+import Vue from "vue";
+
+// 给Toast添加一个创建组件实例的方法，可以动态编译自身模板并挂载
+Toast.getInstance = props => {
+  // 创建一个Vue实例
+  const instance = new Vue({
+    render(h) {
+      // h 是 createElement 方法的缩写
+      // 渲染函数：用于渲染Toast模板为虚拟dom
+      return h(Toast);
+    }
+  }).$mount(); // 执行挂载,若不指定选择器，则模板将被渲染为文档之外的元素
+
+  // 由于上面的$mount()没有指定挂载的选择器
+  // 必须使用原生dom api把它插入文档中
+  // $el指的是渲染的Toast中真实dom元素
+  document.body.appendChild(instance.$el); // $mount()指定了选择器，则不需要这一行代码了
+
+  // 获取Toast实例，$children指的是当前Vue实例中包含的所有组件实例
+  const toast = instance.$children[0];
+  return toast;
+};
+
+// 设计单例模式，全局范围唯一创建一个Toast实例，反复利用已经存在的Toast实例
+let msgInstance = null;
+function getInstance() {
+  msgInstance = msgInstance || Toast.getInstance();
+  return msgInstance;
+}
+
+// 暴露接口
+export default {
+  info({ duration = 2, content = "" }) {
+    getInstance().add({
+      content,
+      duration
+    });
+  }
+};
+
+
+// main.js中
+import Toast from '../components/Toast.vue';
+Vue.prototype.$toast = Toast.info;
+
+
+// 在其他组件中使用
+this.$toast({
+    content: '123',
+    duration: 2
+});
+```
+
+
+也可以使用 `Vue.extend` vue构造器，创建一个‘子类’的方式来挂载 `Toast` 组件。
+
+``` javascript
+// 改动代码
+Toast.getInstance = props => {
+  const Profile  = Vue.extend(Toast)
+  const instance = new Profile().$mount()
+
+  // 由于上面的$mount()没有指定挂载的选择器
+  // 必须使用原生dom api把它插入文档中
+  // $el指的是渲染的Toast中真实dom元素
+  document.body.appendChild(instance.$el); // $mount()指定了选择器，则不需要这一行代码了
+  return instance;
+};
+```
+
+参考：[Vue 自定义全局消息框组件](https://www.cnblogs.com/conglvse/p/9641550.html)
