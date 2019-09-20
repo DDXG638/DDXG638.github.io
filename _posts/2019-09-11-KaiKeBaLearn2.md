@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "vue-router && vuex"
-subtitle:   "记录一些没有使用过的vue框架中的功能"
+subtitle:   "记录一些没有使用过的vue框架中的功能，路由模式、路由配置、导航守卫、路由元信息、Cube-UI、axios 拦截器、vuex的订阅、VUE 插件开发、vue 自定义使用api调用的全局组件、仿照cube-ui的create-api，封装一个非常简单的"
 date:       2019-09-11 21:00:00
 author:     "ddxg"
 header-img: "img/home-bg-o.jpg"
