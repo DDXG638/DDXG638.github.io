@@ -548,6 +548,88 @@ Polyfill提供的就是一个这样功能的补充，实现了Array、Object等�
 
 
 
+## 自定义Loader
+
+可以查看 **[官方文档](https://www.webpackjs.com/api/loaders/)** 
+
+loader处理代码：
+``` javascript
+/**
+ * content: 一般是源码
+ * map 和 meta 为可选项
+ * see: https://www.webpackjs.com/api/loaders/
+ */
+module.exports = function(content, map, meta) {
+    // 函数的 this 上下文将由 webpack 填充，有很多api
+    // 如果这个 loader 配置了 options 对象的话，this.query 就指向这个 option 对象
+    console.log('query', this.query);
+    
+    // return content + `console.log('${this.query.name}')`;
+
+    // 除了直接return之外，也可以使用this.callback来返回多个结果
+    const ret = content + `console.log('${this.query.name}')`;
+    this.callback(null, ret);
+};
+```
+
+`webpack.config.js` 中添加自定义loader
+``` javascript
+{
+    // 使用babel 
+    test: /\.js$/, 
+    exclude: /node_modules/, // 忽略依赖中的文件
+    use: [
+        {
+            loader: "babel-loader",
+            // 配置写在独立的.babelrc
+            // options: {
+            //     presets: ["@babel/preset-env"]
+            // }
+        },
+        {
+            // 需要使用绝对路径
+            loader: path.resolve(__dirname, './src/loader/myLoader.js'),
+            options: {
+                name: '自定义loader2'
+            }
+        }
+    ]
+}
+```
+
+获取复杂参数的话可以使用官方推荐的 **[loader-utils](https://github.com/webpack/loader-utils#getoptions)**
+``` javascript
+const loaderUtils = require('loader-utils');
+
+// 获取options
+const options = loaderUtils.getOptions(this);
+```
+
+如果存在异步操作的话，需要使用 `this.data` 处理。
+``` javascript
+module.exports = function(content, map, meta) {
+    const options = loaderUtils.getOptions(this);
+    // 异步操作，告诉 loader-runner 这个 loader 将会异步地回调。返回 this.callback。
+    const callback = this.async();
+    setTimeout(function() {
+        const ret = content + `console.log('${options.name}')`;
+        callback(null, ret)
+    }, 2000);
+};
+```
+
+loader中自定义path路径太长优化，在 `webpack.config.js` 中配置 `resolveLoader.modules`
+``` javascript
+resolveLoader: {
+    modules: ['node_modules', './src/loader']
+}
+
+// loader: path.resolve(__dirname, './src/loader/myLoader.js'),
+// 配置resolveLoader.modules之后就不用再写这么长的path路径了
+loader: 'myLoader',
+```
+
+
 
 参考：
 - [Babel 7.1介绍 transform-runtime polyfill env](https://www.jianshu.com/p/d078b5f3036a)
