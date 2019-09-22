@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "webpack入门练习"
-subtitle:   "记录一些webpack相关的入门练习"
+subtitle:   "记录一些webpack相关的入门练习。file-loader、url-loader、样式loader、html loader、html-webpack-plugin、devtool-sourceMap、开发中 Server(devServer)、devtool-sourceMap、开启 HMR 模块热替换特性、@babel/polyfill、@babel/plugin-transform-runtime"
 date:       2019-09-19 21:00:00
 author:     "ddxg"
 header-img: "img/home-bg-o.jpg"
@@ -493,6 +493,13 @@ webpack.config.js 中 增加一个loader
 
 安装 `npm install --save @babel/polyfill`，使用 `useBuiltIns: 'usage'` 按需引入的话，
 就不需要再页面中 `import/require @babel/polyfill` 了。不使用按需引入的话，打包后的js体积将会非常大。
+`useBuiltIns: 'usage'` 的行为类似 babel-transform-runtime，不会造成全局污染
+
+Polyfill提供的就是一个这样功能的补充，实现了Array、Object等上的新方法，
+实现了Promise、Symbol这样的新Class等。到这里应该能明白了，
+为什么安装 `@babel/polyfill` 没有 `-dev` ，因为就算代码发布后，
+编译后的代码依然会依赖这些新特性来实现功能。
+
 ``` javascript
 {
     "presets": [
@@ -503,8 +510,44 @@ webpack.config.js 中 增加一个loader
     ]
 }
 ```
+`@babel/preset-env` 的配置可以查看：[babel-preset-env](https://babeljs.io/docs/en/babel-preset-env)
+
+
+**如何确定babel是否工作了呢？**
+
+我打包完之后发现打包出来的js文件只增大了一点点，我都不太敢相信babel是不是真的将兼容代码打包进去了，我也没有什么特别准确的方法，我对比了一下使用babel前后代码的对比，应该有下面图片中类似的代码就是打包成功改了。
+![img](/img/2019/webpack2.png)
+
+
+**`@babel/polyfill` 存在一些问题：**
+- 打包体积太大：默认是全部引入，造成一些没有用到的代码也引入了。
+- 污染全局环境: 那么像Promise这样的新类就是挂载在全局上的，这样就会污染了全局命名空间。如果是开发自己的项目还是没啥为题的。但是如果你是开发工具库给别人使用的话就有问题了，你就会污染别人的全局环境。
+
+不过还好，babel可以设置按需引入，`useBuiltIns: 'usage'`
+
+
 
 ### [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
 
+由于 `@babel/polyfill` 会存在上面的问题，在开发工具库的话就可以使用 `@babel/plugin-transform-runtime` 
 
-这个转换器的另一个目的是为您的代码创建一个沙箱环境。如果直接导入core-js或@babel/polyfill及其提供的内置组件(如Promise、Set和Map)，则会污染全局范围。虽然这对于应用程序或命令行工具来说是可以的，但是如果您的代码是一个库，您打算将其发布给其他人使用，或者您不能确切地控制代码运行的环境，那么就会出现问题
+`@babel/plugin-transform-runtime` 的好处：
+- 避免多次编译出helper函数
+- 不会污染全局作用域
+
+这个转换器的另一个目的是为您的代码创建一个沙箱环境。为core-js这里内建的实例提供假名，你可以无缝的使用这些新特性，而不需要使用require polyfill。
+
+**如何使用** 就直接查看官方文档就行了，[babel-plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime)
+
+
+不过，babel-runtime有个缺点，它不模拟实例方法，即内置对象原型上的方法，所以类似Array.prototype.find，你通过babel-runtime是无法使用的。
+"foobar".includes("foo")，这样的实例方法仍然是不能正常执行的，因为他在挂载在String.prototype上的，
+
+
+**所以什么时候用 `polyfill` 什么时候用 `runtime` 就需要自己根据项目用途来判断了**
+
+
+
+
+参考：
+- [Babel 7.1介绍 transform-runtime polyfill env](https://www.jianshu.com/p/d078b5f3036a)
