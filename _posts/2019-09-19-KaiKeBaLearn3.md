@@ -12,7 +12,7 @@ tags:
     - kaikeba
 ---
 
-# webpack入门练习
+# [webpack入门练习](https://github.com/DDXG638/myLearn/tree/master/webpack/singlePage)
 
 > 在工作中经常接触webpack相关的东西，像Vue工程打包、内部封装的库和自己封装js功能库的时候都会用到webpack打包。
 > 但是，我对webpack的接触是非常零散的，连皮毛都不及，经常不知道要将相关的配置写到webpack配置文件的哪里，对webpack太陌生了。
