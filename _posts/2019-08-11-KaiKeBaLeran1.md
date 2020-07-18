@@ -125,23 +125,72 @@ this.$parent.$emit('addFormItem', this);
 
 如果层级结构改变，那 `this.$parent` 就指向错误了，功能就不能正常进行了。
 
-后来参考了 `element-ui` 的方法，一层一层的向上找对应的组件，`element-ui` 的源码：
+后来参考了 [`element-ui`](https://github.com/ElemeFE/element/blob/dev/src/mixins/emitter.js) 的方法，一层一层的向上找对应的组件，`element-ui` 的源码：
 ``` javascript
-dispatch(componentName, eventName, params) {
-    var parent = this.$parent || this.$root;
-    var name = parent.$options.componentName;
+// 参考element-ui
+// see，https://github.com/ElemeFE/element/blob/dev/src/mixins/emitter.js
 
+function broadcast(componentName, eventName, params) {
+  this.$children.forEach(child => {
+    var name = child.$options.componentName;
+    if (name === componentName) {
+      child.$emit.apply(child, [eventName].concat(params));
+    } else {
+      broadcast.apply(child, [componentName, eventName].concat([params]));
+    }
+  });
+}
 
-    // 存在父组件 && 组件名称不符合时，就再网上一层寻找。这里 !name 是为了过滤普通标签，这里找的都是自定义组件
-    while (parent && (!name || name !== componentName)) {
+export default {
+  methods: {
+    dispatch(componentName, eventName, params) {
+      var parent = this.$parent || this.$root;
+      var name = parent.$options.componentName;
+      // 存在父组件 && 组件名称不符合时，就再网上一层寻找。这里 !name 是为了过滤普通标签，这里找的都是自定义组件
+      while (parent && (!name || name !== componentName)) {
         parent = parent.$parent;
 
         if (parent) {
-            name = parent.$options.componentName;
+          name = parent.$options.componentName;
         }
-    }
-    if (parent) {
+      }
+      if (parent) {
         parent.$emit.apply(parent, [eventName].concat(params));
+      }
+    },
+    broadcast(componentName, eventName, params) {
+      broadcast.call(this, componentName, eventName, params);
     }
+  }
+};
+```
+
+``` javascript
+Vue.prototype.$dispatch = function(eventName, data) {
+  let parent = this.$parent;
+  // 查找父元素
+  while (parent) {
+    if (parent) {
+      // 父元素用$emit触发
+      parent.$emit(eventName, data);
+      // 递归查找父元素
+      parent = parent.$parent;
+    } else {
+      break;
+    }
+  }
+};
+
+Vue.prototype.$boardcast = function(eventName, data) {
+  boardcast.call(this, eventName, data);
+};
+function boardcast(eventName, data) {
+  this.$children.forEach(child => {
+    // 子元素触发$emit
+    child.$emit(eventName, data);
+    if (child.$children.length) {
+      boardcast.call(child, eventName, data);
+    }
+  });
 }
 ```
