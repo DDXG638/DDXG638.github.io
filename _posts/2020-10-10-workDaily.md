@@ -2,7 +2,7 @@
 layout:     post
 title:      "工作记录"
 subtitle:   "记录一些工作中指的记录的东西，或者是经常忘记的东西。"
-date:       2019-10-19 20:00:00
+date:       2020-10-10 20:00:00
 author:     "ddxg"
 header-img: "img/home-bg-o.jpg"
 header-mask: 0.3
@@ -175,6 +175,10 @@ TODO: 缺一张图
     background: url("./imgs/icon-close.png") no-repeat center;
     background-size: 32px 32px;
   }
+  /* ios15以上，在type=search时会在前面显示一个默认的搜索图标，这是我们不期望的，可以隐藏 */
+  &::-webkit-search-decoration {
+    display: none;
+  }
 }
 </style>
 ```
@@ -332,6 +336,7 @@ export default {
 .duohang {
     /* 多行 */
     display: -webkit-box;
+    /* autoprefixer: ignore next */
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
@@ -342,6 +347,14 @@ export default {
   text-overflow:ellipsis;
 }
 ```
+
+`-webkit-line-clamp` 用来限制在一个块元素显示的文本的行数。 为了实现该效果，它需要组合其他的WebKit属性。
+
+`display: -webkit-box;` 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 。
+
+`-webkit-box-orient` 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 。
+
+/* autoprefixer: ignore next */ 这个注释是因为低版本会去除 `-webkit-box-orient: vertical;` 这行代码，[9.6.1版本修复了](https://github.com/postcss/autoprefixer/issues/1279)
 
 参考：
 - [CSS实现单行、多行文本溢出显示省略号（…）](https://www.cnblogs.com/gopark/p/8875655.html)
